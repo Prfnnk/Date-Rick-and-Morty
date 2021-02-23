@@ -1,11 +1,10 @@
 import styled, { css } from 'styled-components';
-import { animated as a } from 'react-spring';
 import heartInitial from '../images/heart-initial.svg';
 import skip from '../images/skip-initial.svg';
 import heartOnTap from '../images/heart-on-tap.svg';
 import skipOnTap from '../images/skip-on-tap.svg';
 
-type CardProps = {
+type CardsType = {
   active: boolean;
 };
 
@@ -33,13 +32,15 @@ export const CardsBlock = styled.div`
   align-items: center;
 `;
 
-export const Card = styled.div<CardProps>`
+export const Card = styled.div<CardsType>`
   position: absolute;
   top: 0;
   left: 0;
   width: 400px;
   height: 400px;
-  background-color: gray;
+  background-color: white;
+  box-shadow: ${(props) =>
+    props.active ? '0px 1.31738px 12.32px rgba(89, 98, 120, 0.3677)' : '0px 1.31738px 12.32px rgba(89, 98, 120, 0)'};
   border-radius: 10px;
   display: flex;
   justify-content: center;
