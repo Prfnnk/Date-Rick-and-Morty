@@ -3,7 +3,19 @@ import gsap from 'gsap';
 import { useQuery } from '@apollo/client';
 import { CHARACTERS } from '../gql/queries/Character.query';
 import { Characters } from '../gql/queries/types/Characters';
-import { Card, ButtonsBlock, LikeBtn, SkipBtn, Wrapper, CardsBlock, Inner } from './styles/style';
+import {
+  Card,
+  ButtonsBlock,
+  LikeBtn,
+  SkipBtn,
+  Wrapper,
+  CardsBlock,
+  Inner,
+  Name,
+  NameSpan,
+  Location,
+  Picture,
+} from './styles/style';
 
 const Cards = () => {
   const { loading, error, data } = useQuery<Characters>(CHARACTERS);
@@ -40,8 +52,10 @@ const Cards = () => {
   const cardAnim = (type: 'skip' | 'like'): void => {
     const card = cardsRef.current[id];
 
-    gsap.to(card, 0.5, {
+    gsap.to(card, 0.4, {
       x: type === 'skip' ? -150 : 150,
+      y: 20,
+      ease: 'Power3.inOut',
       opacity: 0,
       onComplete: () => {
         removeCard();
@@ -66,12 +80,13 @@ const Cards = () => {
                   return (
                     <>
                       <Card ref={(el) => (cardsRef.current[item.id] = el)} key={item.id} active={item.id === id}>
-                        <div className="pic">
+                        <Picture>
                           <img src={item.image ?? ''} alt="" />
-                          <div className="name">{item.name ?? '-'}</div>
-                          <div className="species">{item.species ?? ''}</div>
-                          <div className="location">{item.location.name ?? ''}</div>
-                        </div>
+                        </Picture>
+                        <Name>
+                          {item.name ?? '-'}, <NameSpan>{item.species ?? ''}</NameSpan>
+                        </Name>
+                        <Location>{item.location.name ?? ''}</Location>
                       </Card>
                     </>
                   );

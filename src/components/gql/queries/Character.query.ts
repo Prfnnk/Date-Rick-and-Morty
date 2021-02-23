@@ -19,4 +19,4 @@ const CHARACTERS = gql`
   }
 `;
 
-export {CHARACTERS}
+export { CHARACTERS };

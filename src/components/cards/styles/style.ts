@@ -39,10 +39,12 @@ export const Card = styled.div<CardsType>`
   width: 400px;
   height: 400px;
   background-color: white;
-  box-shadow: ${(props) =>
-    props.active ? '0px 1.31738px 12.32px rgba(89, 98, 120, 0.3677)' : '0px 1.31738px 12.32px rgba(89, 98, 120, 0)'};
+  /* box-shadow: ${(props) =>
+    props.active ? '0px 1.31738px 12.32px rgba(89, 98, 120, 0.3677)' : '0px 1.31738px 12.32px rgba(89, 98, 120, 0)'}; */
   border-radius: 10px;
+  border: 1px solid gray;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
@@ -81,4 +83,23 @@ export const LikeBtn = styled.div`
   &:hover {
     background-image: url('${heartOnTap}');
   }
+`;
+export const Name = styled.div`
+  display: flex;
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  margin: 10px 0;
+  width: 300px;
+`;
+export const NameSpan = styled.div`
+  margin-left: 5px;
+  font-weight: 400;
+`;
+export const Location = styled.div`
+  width: 300px;
+  text-align: left;
+`;
+export const Picture = styled.div`
+  width: 300px;
 `;
