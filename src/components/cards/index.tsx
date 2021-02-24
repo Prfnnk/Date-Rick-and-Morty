@@ -18,16 +18,18 @@ import {
 } from './styles/style';
 
 const Cards = () => {
+  const [nextPage, setNextPage] = useState(2);
   const { loading, error, data, fetchMore } = useQuery<Characters>(CHARACTERS, {
     variables: {
-      notifyOnNetworkStatusChange: true,
       page: 1,
     },
+    notifyOnNetworkStatusChange: true,
   });
   const results = data?.characters?.results;
   const [id, setId] = useState(null);
   const [cards, setCards] = useState([]);
   const [ok, setOk] = useState(false);
+  const [refetch, setRefetch] = useState(false);
   const cardsRef = useRef([]);
 
   const isEmpty = cards.length === 0;
@@ -48,9 +50,15 @@ const Cards = () => {
     }
   }, [cards, results, ok]);
 
+  useEffect(() => {
+    if (cards && cards.length > 0 && refetch) {
+      setId(cards[0].id);
+      setRefetch(false);
+    }
+  }, [refetch, cards]);
+
   const removeCard = () => {
     const filtered = cards.filter((item) => item.id !== id);
-    console.log(filtered);
     setCards(filtered);
   };
 
@@ -102,21 +110,25 @@ const Cards = () => {
             <SkipBtn onClick={() => cardAnim('skip')}></SkipBtn>
             <LikeBtn onClick={() => cardAnim('like')}></LikeBtn>
           </ButtonsBlock>
-          <div
-            className="button"
-            onClick={() =>
-              fetchMore({
-                variables: {
-                  page: 2,
-                },
-              })
-            }
-          >
-            refetch
-          </div>
         </Inner>
       ) : (
-        <div>zagruzka</div>
+        <div
+          onClick={() =>
+            fetchMore({
+              variables: {
+                page: nextPage,
+              },
+            }).then((res) => {
+              const newPage = res?.data?.characters?.info?.next;
+              const newData = res?.data?.characters?.results;
+              setNextPage(newPage);
+              setRefetch(true);
+              setCards(newData);
+            })
+          }
+        >
+          zagruzka
+        </div>
       )}
     </Wrapper>
   );

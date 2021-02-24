@@ -13,6 +13,14 @@ export interface Characters_characters_info {
    * The length of the response.
    */
   count: number | null;
+  /**
+   * The amount of pages.
+   */
+  pages: number | null;
+  /**
+   * Number of the next page (if it exists)
+   */
+  next: number | null;
 }
 
 export interface Characters_characters_results_location {
@@ -59,4 +67,8 @@ export interface Characters {
    * Get the list of all characters
    */
   characters: Characters_characters | null;
+}
+
+export interface CharactersVariables {
+  page?: number | null;
 }
