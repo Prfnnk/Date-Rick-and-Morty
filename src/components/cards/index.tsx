@@ -18,7 +18,12 @@ import {
 } from './styles/style';
 
 const Cards = () => {
-  const { loading, error, data } = useQuery<Characters>(CHARACTERS);
+  const { loading, error, data, fetchMore } = useQuery<Characters>(CHARACTERS, {
+    variables: {
+      notifyOnNetworkStatusChange: true,
+      page: 1,
+    },
+  });
   const results = data?.characters?.results;
   const [id, setId] = useState(null);
   const [cards, setCards] = useState([]);
@@ -97,6 +102,18 @@ const Cards = () => {
             <SkipBtn onClick={() => cardAnim('skip')}></SkipBtn>
             <LikeBtn onClick={() => cardAnim('like')}></LikeBtn>
           </ButtonsBlock>
+          <div
+            className="button"
+            onClick={() =>
+              fetchMore({
+                variables: {
+                  page: 2,
+                },
+              })
+            }
+          >
+            refetch
+          </div>
         </Inner>
       ) : (
         <div>zagruzka</div>
