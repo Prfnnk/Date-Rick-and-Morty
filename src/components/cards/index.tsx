@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import Loading from '../loading';
 import { useQuery } from '@apollo/client';
 import { CHARACTERS } from '../gql/queries/Character.query';
 import { Characters } from '../gql/queries/types/Characters';
@@ -30,6 +31,7 @@ const Cards = () => {
   const [cards, setCards] = useState([]);
   const [ok, setOk] = useState(false);
   const [refetch, setRefetch] = useState(false);
+  const [isRefetching, setIsRefetching] = useState(false);
   const cardsRef = useRef([]);
 
   const isEmpty = cards.length === 0;
@@ -76,7 +78,7 @@ const Cards = () => {
     });
   };
 
-  if (loading && !ok) return <p>Loading...</p>;
+  if ((loading && !ok) || isRefetching) return <Loading />;
   if (error) return <p>Error :(</p>;
 
   return (
@@ -118,13 +120,18 @@ const Cards = () => {
               variables: {
                 page: nextPage,
               },
-            }).then((res) => {
-              const newPage = res?.data?.characters?.info?.next;
-              const newData = res?.data?.characters?.results;
-              setNextPage(newPage);
-              setRefetch(true);
-              setCards(newData);
             })
+              .then((res) => {
+                const newPage = res?.data?.characters?.info?.next;
+                const newData = res?.data?.characters?.results;
+                setNextPage(newPage);
+                setRefetch(true);
+                setCards(newData);
+                setIsRefetching(true);
+              })
+              .finally(() => {
+                setIsRefetching(false);
+              })
           }
         >
           zagruzka
