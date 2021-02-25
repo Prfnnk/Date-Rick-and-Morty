@@ -17,7 +17,6 @@ import {
   NameSpan,
   Location,
   Picture,
-  CardWrapper,
 } from './styles/style';
 
 const Cards = () => {
@@ -85,7 +84,7 @@ const Cards = () => {
 
   return (
     <Wrapper>
-      {!isEmpty ? (
+      {!isEmpty && ok && (
         <Inner>
           <CardsBlock>
             {cards &&
@@ -95,7 +94,7 @@ const Cards = () => {
                     return null;
                   }
                   return (
-                    <CardWrapper>
+                    <>
                       <Card ref={(el) => (cardsRef.current[item.id] = el)} key={item.id} active={item.id === id}>
                         <Picture>
                           <img src={item.image ?? ''} alt="" />
@@ -105,7 +104,7 @@ const Cards = () => {
                         </Name>
                         <Location>{item.location.name ?? ''}</Location>
                       </Card>
-                    </CardWrapper>
+                    </>
                   );
                 })
                 .reverse()}
@@ -115,7 +114,8 @@ const Cards = () => {
             <LikeBtn onClick={() => cardAnim('like')}></LikeBtn>
           </ButtonsBlock>
         </Inner>
-      ) : (
+      )}
+      {isEmpty && ok && (
         <RefetchBlock
           nextPage={nextPage}
           setNextPage={setNextPage}

@@ -30,6 +30,8 @@ export const CardsBlock = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 0 10px rgb(0 0 0 / 20%);
+  border-radius: 10px;
 `;
 
 export const Card = styled.div<CardsType>`
@@ -39,9 +41,7 @@ export const Card = styled.div<CardsType>`
   width: 400px;
   height: 400px;
   background-color: white;
-
   border-radius: 10px;
-  // border: 1px solid gray;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -101,11 +101,5 @@ export const Location = styled.div`
 `;
 export const Picture = styled.div`
   width: 300px;
-`;
-export const CardWrapper = styled.div`
-  // box-shadow: 0px 1.31738px 12.32px rgba(89, 98, 120, 0.3677);
-  box-shadow: 0 0 10px rgb(0 0 0 / 20%);
-  width: 400px;
-  height: 400px;
-  border-radius: 10px;
+  height: 300px;
 `;
