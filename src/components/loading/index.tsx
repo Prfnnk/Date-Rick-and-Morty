@@ -5,9 +5,7 @@ import {} from './styles/style';
 const Loading = () => {
   return (
     <div className="kek">
-      <div className="lodimg-img">
-        <img src={pickle} alt="" />
-      </div>
+      <div className="lodimg-img">{/* <img src={pickle} alt="" /> */}</div>
       ЗАГРУЗКА ЛАБАДАБАДАБДАБ
     </div>
   );

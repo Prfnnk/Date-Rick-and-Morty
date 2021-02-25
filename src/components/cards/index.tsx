@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import Loading from '../loading';
+import RefetchBlock from '../refetch';
 import { useQuery } from '@apollo/client';
 import { CHARACTERS } from '../gql/queries/Character.query';
 import { Characters } from '../gql/queries/types/Characters';
@@ -16,6 +17,7 @@ import {
   NameSpan,
   Location,
   Picture,
+  CardWrapper,
 } from './styles/style';
 
 const Cards = () => {
@@ -93,7 +95,7 @@ const Cards = () => {
                     return null;
                   }
                   return (
-                    <>
+                    <CardWrapper>
                       <Card ref={(el) => (cardsRef.current[item.id] = el)} key={item.id} active={item.id === id}>
                         <Picture>
                           <img src={item.image ?? ''} alt="" />
@@ -103,7 +105,7 @@ const Cards = () => {
                         </Name>
                         <Location>{item.location.name ?? ''}</Location>
                       </Card>
-                    </>
+                    </CardWrapper>
                   );
                 })
                 .reverse()}
@@ -114,28 +116,14 @@ const Cards = () => {
           </ButtonsBlock>
         </Inner>
       ) : (
-        <div
-          onClick={() =>
-            fetchMore({
-              variables: {
-                page: nextPage,
-              },
-            })
-              .then((res) => {
-                const newPage = res?.data?.characters?.info?.next;
-                const newData = res?.data?.characters?.results;
-                setNextPage(newPage);
-                setRefetch(true);
-                setCards(newData);
-                setIsRefetching(true);
-              })
-              .finally(() => {
-                setIsRefetching(false);
-              })
-          }
-        >
-          zagruzka
-        </div>
+        <RefetchBlock
+          nextPage={nextPage}
+          setNextPage={setNextPage}
+          setRefetch={setRefetch}
+          setCards={setCards}
+          setIsRefetching={setIsRefetching}
+          fetchMore={fetchMore}
+        />
       )}
     </Wrapper>
   );
