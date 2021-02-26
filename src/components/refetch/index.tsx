@@ -1,5 +1,7 @@
 import React from 'react';
 import sadPic from './image/theEnd.png';
+import _ from 'lodash';
+import { randomPage } from '../../utils/randomPage';
 import { BlockWrapper, BtnBlock, LeftBtn, RightBtn, SadPic, SadText } from './styles/style';
 
 const RefetchBlock = ({ fetchMore, setNextPage, setRefetch, setCards, setIsRefetching, nextPage }) => {
@@ -10,11 +12,15 @@ const RefetchBlock = ({ fetchMore, setNextPage, setRefetch, setCards, setIsRefet
       },
     })
       .then((res) => {
-        const newPage = res?.data?.characters?.info?.next;
+        let newPage = res?.data?.characters?.info?.next;
         const newData = res?.data?.characters?.results;
+        const shuffledNew = _.shuffle(newData);
+        if (newPage === null) {
+          newPage = randomPage;
+        }
         setNextPage(newPage);
         setRefetch(true);
-        setCards(newData);
+        setCards(shuffledNew);
         setIsRefetching(true);
       })
       .finally(() => {

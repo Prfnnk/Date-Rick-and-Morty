@@ -13,6 +13,7 @@
     "@types/react-dom": "^17.0.0",
     "graphql": "^15.5.0",
     "gsap": "^3.6.0",
+    "lodash": "^4.17.21",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.2",
@@ -27,7 +28,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "gql:types": "apollo client:codegen --localSchemaFile=src/components/gql/schema.json --target=typescript --includes=src/components/gql/**/*.ts --excludes=src/components/gql/client/**/*.typeDefs.ts  --tagName=gql  types"
+    "gql:types": "apollo client:codegen --localSchemaFile=src/gql/schema.json --target=typescript --includes=src/gql/**/*.ts --excludes=src/gql/client/**/*.typeDefs.ts  --tagName=gql  types"
   },
   "eslintConfig": {
     "extends": [

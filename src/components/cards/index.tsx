@@ -3,8 +3,9 @@ import gsap from 'gsap';
 import Loading from '../loading';
 import RefetchBlock from '../refetch';
 import { useQuery } from '@apollo/client';
-import { CHARACTERS } from '../gql/queries/Character.query';
-import { Characters } from '../gql/queries/types/Characters';
+import { CHARACTERS } from '../../gql/queries/Character.query';
+import { Characters } from '../../gql/queries/types/Characters';
+import { randomPage } from '../../utils/randomPage';
 import {
   Card,
   ButtonsBlock,
@@ -18,16 +19,18 @@ import {
   Location,
   Picture,
 } from './styles/style';
+import _ from 'lodash';
 
 const Cards = () => {
   const [nextPage, setNextPage] = useState(2);
   const { loading, error, data, fetchMore } = useQuery<Characters>(CHARACTERS, {
     variables: {
-      page: 1,
+      page: randomPage,
     },
     notifyOnNetworkStatusChange: true,
   });
   const results = data?.characters?.results;
+  const nextRandomPage = data?.characters?.info?.next;
   const [id, setId] = useState(null);
   const [cards, setCards] = useState([]);
   const [ok, setOk] = useState(false);
@@ -38,12 +41,14 @@ const Cards = () => {
   const isEmpty = cards.length === 0;
 
   useEffect(() => {
-    if (results) {
-      setCards(results);
-      setId(results[0].id);
+    if (results && nextRandomPage) {
+      const shuffled = _.shuffle(results);
+      setCards(shuffled);
+      setId(shuffled[0].id);
       setOk(true);
+      setNextPage(nextRandomPage);
     }
-  }, [results]);
+  }, [results, nextRandomPage]);
 
   useEffect(() => {
     if (cards && results && ok) {

@@ -1,4 +1,4 @@
 {
   "name": "Rick and Morty GraphQL Schema",
-  "schemaPath": "src/components/gql/schema.json"
+  "schemaPath": "src/gql/schema.json"
 }
