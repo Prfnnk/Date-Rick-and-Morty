@@ -15,9 +15,11 @@ import {
   CardsBlock,
   Inner,
   Name,
+  NameBlock,
   NameSpan,
   Location,
   Picture,
+  Info,
 } from './styles/style';
 import _ from 'lodash';
 
@@ -84,6 +86,8 @@ const Cards = () => {
     });
   };
 
+  console.log(isRefetching, 'isRefetching');
+
   if ((loading && !ok) || isRefetching) return <Loading />;
   if (error) return <p>Error :(</p>;
 
@@ -104,10 +108,13 @@ const Cards = () => {
                         <Picture>
                           <img src={item.image ?? ''} alt="" />
                         </Picture>
-                        <Name>
-                          {item.name ?? '-'}, <NameSpan>{item.species ?? ''}</NameSpan>
-                        </Name>
-                        <Location>{item.location.name ?? ''}</Location>
+                        <Info>
+                          <NameBlock>
+                            <Name title={item.name}>{item.name ?? '-'}</Name>,
+                            <NameSpan title={item.species}>{item.species ?? ''}</NameSpan>
+                          </NameBlock>
+                          <Location>{item.location.name ?? ''}</Location>
+                        </Info>
                       </Card>
                     </>
                   );

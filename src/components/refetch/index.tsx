@@ -6,6 +6,7 @@ import { BlockWrapper, BtnBlock, LeftBtn, RightBtn, SadPic, SadText } from './st
 
 const RefetchBlock = ({ fetchMore, setNextPage, setRefetch, setCards, setIsRefetching, nextPage }) => {
   const onClick = () => {
+    setIsRefetching(true);
     fetchMore({
       variables: {
         page: nextPage,
@@ -21,7 +22,6 @@ const RefetchBlock = ({ fetchMore, setNextPage, setRefetch, setCards, setIsRefet
         setNextPage(newPage);
         setRefetch(true);
         setCards(shuffledNew);
-        setIsRefetching(true);
       })
       .finally(() => {
         setIsRefetching(false);

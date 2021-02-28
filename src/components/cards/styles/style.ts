@@ -46,6 +46,7 @@ export const Card = styled.div<CardsType>`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 `;
 
 const Btn = css`
@@ -83,23 +84,41 @@ export const LikeBtn = styled.div`
     background-image: url('${heartOnTap}');
   }
 `;
-export const Name = styled.div`
+export const NameBlock = styled.div`
   display: flex;
-  font-family: 'Roboto', sans-serif;
-  font-size: 20px;
+
+  font-size: 24px;
   font-weight: 500;
-  margin: 10px 0;
-  width: 300px;
+  margin-bottom: 5px;
+`;
+const TextEllipsis = css`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+`;
+export const Name = styled.div`
+  ${TextEllipsis};
+  max-width: 230px;
 `;
 export const NameSpan = styled.div`
   margin-left: 5px;
   font-weight: 400;
+  ${TextEllipsis};
 `;
 export const Location = styled.div`
-  width: 300px;
+  font-size: 20px;
+`;
+export const Info = styled.div`
+  position: absolute;
+  font-family: 'Roboto', sans-serif;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background-color: rgba(255, 255, 255, 0.7);
   text-align: left;
+  padding: 20px;
 `;
 export const Picture = styled.div`
-  width: 300px;
-  height: 300px;
+  width: 100%;
 `;
