@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import Loading from '../loading';
 import RefetchBlock from '../refetch';
+import FilterBlock from '../fiter-block';
 import { useQuery } from '@apollo/client';
 import { CHARACTERS } from '../../gql/queries/Character.query';
 import { Characters } from '../../gql/queries/types/Characters';
@@ -93,6 +94,7 @@ const Cards = () => {
 
   return (
     <Wrapper>
+      <FilterBlock />
       {!isEmpty && ok && (
         <Inner>
           <CardsBlock>
