@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components';
+import { Btn } from '../../refetch/styles/style';
+import checked from '../images/checked.svg';
 
-export const FilterBody = styled.div`
+export const FilterBody = styled.form`
   position: absolute;
   left: 0;
   top: 0;
@@ -32,6 +34,11 @@ export const Input = styled.input`
   height: 30px;
   font-size: 18px;
   padding: 5px;
+
+  &:focus {
+    background: none;
+    outline-color: #f4511e;
+  }
 `;
 
 export const Label = styled.label`
@@ -59,11 +66,15 @@ export const Checkbox = styled.input`
     top: calc(50% - 8px);
     width: 15px;
     height: 15px;
-    background: red;
+    background-image: url(${checked});
   }
 `;
 export const CheckboxItem = styled.div`
   display: flex;
   font-size: 18px;
   margin-bottom: 10px;
+`;
+export const SubmitBtn = styled(Btn)`
+  width: 125px;
+  height: 35px;
 `;

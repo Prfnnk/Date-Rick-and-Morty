@@ -1,49 +1,108 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import { FilterItem, FilterBody, Title, ItemTitle, Input, Checkbox, CheckboxItem, Label } from './styles/style';
+import _ from 'lodash';
+import { randomPage } from '../../utils/randomPage';
+import {
+  FilterItem,
+  FilterBody,
+  Title,
+  ItemTitle,
+  Input,
+  Checkbox,
+  CheckboxItem,
+  Label,
+  SubmitBtn,
+} from './styles/style';
 
-const FilterBlock = () => {
+// type Inputs = {
+//   name: string;
+//   exampleRequired: string;
+// };
+
+const FilterBlock = ({
+  setRefetch,
+  setCards,
+  setIsRefetching,
+  fetchMore,
+  setNextPage,
+  setFiltered,
+  register,
+  handleSubmit,
+}) => {
+  const onSubmit = (data) => {
+    const name = data?.name;
+    const gender = data?.gender;
+    // const species = data?.species;
+    // console.log(species);
+
+    setIsRefetching(true);
+    fetchMore({
+      variables: {
+        page: 1,
+        name: name,
+        gender: gender,
+        // species: species,
+      },
+    })
+      .then((res) => {
+        let newPage = res?.data?.characters?.info?.next;
+        const newData = res?.data?.characters?.results;
+        console.log(newData, 'new res');
+        const shuffledNew = _.shuffle(newData);
+        if (newPage === null) {
+          newPage = randomPage;
+        }
+        setNextPage(newPage);
+        setRefetch(true);
+        setCards(shuffledNew);
+      })
+      .finally(() => {
+        setIsRefetching(false);
+        setFiltered(true);
+      });
+  };
+
   return (
-    <FilterBody>
+    <FilterBody onSubmit={handleSubmit(onSubmit)}>
       <Title>Выберите фильтры для поиска</Title>
       <FilterItem>
-        <ItemTitle>by name</ItemTitle>
-        <Input></Input>
+        <ItemTitle>По имени:</ItemTitle>
+        <Input ref={register} name="name"></Input>
       </FilterItem>
       <FilterItem>
-        <ItemTitle>by species</ItemTitle>
+        <ItemTitle>По виду:</ItemTitle>
         <CheckboxItem>
-          <Checkbox type="checkbox" id="human" value="human"></Checkbox>
+          <Checkbox name="species" ref={register} type="radio" id="human" value="Human"></Checkbox>
           <Label htmlFor="human">Human</Label>
         </CheckboxItem>
         <CheckboxItem>
-          <Checkbox type="checkbox" id="alien" value="alien"></Checkbox>
+          <Checkbox name="species" ref={register} type="radio" id="alien" value="Alien"></Checkbox>
           <Label htmlFor="alien">Alien</Label>
         </CheckboxItem>
         <CheckboxItem>
-          <Checkbox type="checkbox" id="mc" value="mc"></Checkbox>
+          <Checkbox name="species" ref={register} type="radio" id="mc" value="Mythological Creature"></Checkbox>
           <Label htmlFor="mc">Mythological Creature</Label>
         </CheckboxItem>
       </FilterItem>
       <FilterItem>
-        <ItemTitle>by gender</ItemTitle>
+        <ItemTitle>По полу:</ItemTitle>
         <CheckboxItem>
-          <Checkbox type="checkbox" id="female" value="female"></Checkbox>
-          <Label htmlFor="female">female</Label>
+          <Checkbox name="gender" ref={register} type="radio" id="female" value="female"></Checkbox>
+          <Label htmlFor="female">Female</Label>
         </CheckboxItem>
         <CheckboxItem>
-          <Checkbox type="checkbox" id="male" value="male"></Checkbox>
-          <Label htmlFor="male">male</Label>
+          <Checkbox name="gender" ref={register} type="radio" id="male" value="male"></Checkbox>
+          <Label htmlFor="male">Male</Label>
         </CheckboxItem>
         <CheckboxItem>
-          <Checkbox type="checkbox" id="genderless" value="genderless"></Checkbox>
-          <Label htmlFor="genderless">genderless</Label>
+          <Checkbox name="gender" ref={register} type="radio" id="genderless" value="genderless"></Checkbox>
+          <Label htmlFor="genderless">Genderless</Label>
         </CheckboxItem>
         <CheckboxItem>
-          <Checkbox type="checkbox" id="unknown" value="unknown"></Checkbox>
-          <Label htmlFor="unknown">unknown</Label>
+          <Checkbox name="gender" ref={register} type="radio" id="unknown" value="unknown"></Checkbox>
+          <Label htmlFor="unknown">Unknown</Label>
         </CheckboxItem>
       </FilterItem>
+      <SubmitBtn type="submit">Найти!</SubmitBtn>
     </FilterBody>
   );
 };

@@ -25,7 +25,7 @@ export const BtnBlock = styled.div`
   display: flex;
   justify-content: space-evenly;
 `;
-const Btn = styled.button`
+export const Btn = styled.button`
   font-family: 'Roboto', sans-serif;
   width: 140px;
   height: 50px;

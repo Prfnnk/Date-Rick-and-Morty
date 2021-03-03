@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
 import gsap from 'gsap';
 import Loading from '../loading';
 import RefetchBlock from '../refetch';
@@ -25,6 +26,7 @@ import {
 import _ from 'lodash';
 
 const Cards = () => {
+  const { register, handleSubmit, watch, errors } = useForm();
   const [nextPage, setNextPage] = useState(2);
   const { loading, error, data, fetchMore } = useQuery<Characters>(CHARACTERS, {
     variables: {
@@ -39,12 +41,14 @@ const Cards = () => {
   const [ok, setOk] = useState(false);
   const [refetch, setRefetch] = useState(false);
   const [isRefetching, setIsRefetching] = useState(false);
+  const [filtered, setFiltered] = useState(false);
   const cardsRef = useRef([]);
 
   const isEmpty = cards.length === 0;
 
   useEffect(() => {
     if (results && nextRandomPage) {
+      console.log(cards, 'cards 1 usef');
       const shuffled = _.shuffle(results);
       setCards(shuffled);
       setId(shuffled[0].id);
@@ -56,6 +60,7 @@ const Cards = () => {
   useEffect(() => {
     if (cards && results && ok) {
       if (cards.length < results.length) {
+        console.log(cards, 'cards 2 usef');
         setId(cards[0]?.id ?? '');
       }
     }
@@ -63,10 +68,15 @@ const Cards = () => {
 
   useEffect(() => {
     if (cards && cards.length > 0 && refetch) {
-      setId(cards[0].id);
+      console.log(cards, 'cards 3 usref');
+      setId(cards[0]?.id);
       setRefetch(false);
     }
-  }, [refetch, cards]);
+    if (cards && filtered) {
+      setId(cards[0]?.id);
+      setRefetch(false);
+    }
+  }, [refetch, cards, filtered]);
 
   const removeCard = () => {
     const filtered = cards.filter((item) => item.id !== id);
@@ -87,14 +97,21 @@ const Cards = () => {
     });
   };
 
-  console.log(isRefetching, 'isRefetching');
-
   if ((loading && !ok) || isRefetching) return <Loading />;
   if (error) return <p>Error :(</p>;
 
   return (
     <Wrapper>
-      <FilterBlock />
+      <FilterBlock
+        register={register}
+        handleSubmit={handleSubmit}
+        setFiltered={setFiltered}
+        setNextPage={setNextPage}
+        setRefetch={setRefetch}
+        setCards={setCards}
+        setIsRefetching={setIsRefetching}
+        fetchMore={fetchMore}
+      />
       {!isEmpty && ok && (
         <Inner>
           <CardsBlock>
