@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useForm } from 'react-hook-form';
+
 import gsap from 'gsap';
 import Loading from '../loading';
 import RefetchBlock from '../refetch';
@@ -25,9 +25,8 @@ import {
 } from './styles/style';
 import _ from 'lodash';
 
-const Cards = () => {
-  const { register, handleSubmit, watch, errors } = useForm();
-  const [nextPage, setNextPage] = useState(2);
+const Cards = (): JSX.Element => {
+  const [nextPage, setNextPage] = useState<number>(2);
   const { loading, error, data, fetchMore } = useQuery<Characters>(CHARACTERS, {
     variables: {
       page: randomPage,
@@ -41,14 +40,12 @@ const Cards = () => {
   const [ok, setOk] = useState(false);
   const [refetch, setRefetch] = useState(false);
   const [isRefetching, setIsRefetching] = useState(false);
-  const [filtered, setFiltered] = useState(false);
   const cardsRef = useRef([]);
 
   const isEmpty = cards.length === 0;
 
   useEffect(() => {
     if (results && nextRandomPage) {
-      console.log(cards, 'cards 1 usef');
       const shuffled = _.shuffle(results);
       setCards(shuffled);
       setId(shuffled[0].id);
@@ -60,7 +57,6 @@ const Cards = () => {
   useEffect(() => {
     if (cards && results && ok) {
       if (cards.length < results.length) {
-        console.log(cards, 'cards 2 usef');
         setId(cards[0]?.id ?? '');
       }
     }
@@ -68,15 +64,11 @@ const Cards = () => {
 
   useEffect(() => {
     if (cards && cards.length > 0 && refetch) {
-      console.log(cards, 'cards 3 usref');
+      console.log(refetch, 'refetch');
       setId(cards[0]?.id);
       setRefetch(false);
     }
-    if (cards && filtered) {
-      setId(cards[0]?.id);
-      setRefetch(false);
-    }
-  }, [refetch, cards, filtered]);
+  }, [refetch, cards]);
 
   const removeCard = () => {
     const filtered = cards.filter((item) => item.id !== id);
@@ -103,9 +95,6 @@ const Cards = () => {
   return (
     <Wrapper>
       <FilterBlock
-        register={register}
-        handleSubmit={handleSubmit}
-        setFiltered={setFiltered}
         setNextPage={setNextPage}
         setRefetch={setRefetch}
         setCards={setCards}

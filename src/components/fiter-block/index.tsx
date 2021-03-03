@@ -1,5 +1,7 @@
 import React from 'react';
+import { useForm } from 'react-hook-form';
 import _ from 'lodash';
+
 import { randomPage } from '../../utils/randomPage';
 import {
   FilterItem,
@@ -13,51 +15,49 @@ import {
   SubmitBtn,
 } from './styles/style';
 
-// type Inputs = {
-//   name: string;
-//   exampleRequired: string;
-// };
+type Form = {
+  name: string;
+  gender: string;
+  species: string;
+};
 
-const FilterBlock = ({
-  setRefetch,
-  setCards,
-  setIsRefetching,
-  fetchMore,
-  setNextPage,
-  setFiltered,
-  register,
-  handleSubmit,
-}) => {
-  const onSubmit = (data) => {
+interface Props {
+  setRefetch: React.Dispatch<React.SetStateAction<boolean>>;
+  setNextPage: React.Dispatch<React.SetStateAction<number>>;
+  fetchMore: any;
+  setCards: React.Dispatch<React.SetStateAction<any[]>>;
+  setIsRefetching: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const FilterBlock = ({ setRefetch, setCards, setIsRefetching, fetchMore, setNextPage }: Props): JSX.Element => {
+  const { register, handleSubmit } = useForm<Form>();
+  const onSubmit = (data: Form): void => {
     const name = data?.name;
     const gender = data?.gender;
-    // const species = data?.species;
-    // console.log(species);
+    const species = data?.species;
 
     setIsRefetching(true);
     fetchMore({
       variables: {
         page: 1,
-        name: name,
-        gender: gender,
-        // species: species,
+        name,
+        gender: gender || '',
+        species: species || '',
       },
     })
       .then((res) => {
         let newPage = res?.data?.characters?.info?.next;
         const newData = res?.data?.characters?.results;
-        console.log(newData, 'new res');
         const shuffledNew = _.shuffle(newData);
         if (newPage === null) {
           newPage = randomPage;
         }
         setNextPage(newPage);
-        setRefetch(true);
         setCards(shuffledNew);
+        setRefetch(true);
       })
       .finally(() => {
         setIsRefetching(false);
-        setFiltered(true);
       });
   };
 

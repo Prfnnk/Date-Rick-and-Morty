@@ -20,8 +20,8 @@ const RefetchBlock = ({ fetchMore, setNextPage, setRefetch, setCards, setIsRefet
           newPage = randomPage;
         }
         setNextPage(newPage);
-        setRefetch(true);
         setCards(shuffledNew);
+        setRefetch(true);
       })
       .finally(() => {
         setIsRefetching(false);
