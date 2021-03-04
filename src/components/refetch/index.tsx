@@ -1,15 +1,29 @@
 import React from 'react';
 import sadPic from './image/theEnd.png';
 import _ from 'lodash';
+import { Props } from '../../shared-types/shared-types';
 import { randomPage } from '../../utils/randomPage';
 import { BlockWrapper, BtnBlock, LeftBtn, RightBtn, SadPic, SadText } from './styles/style';
 
-const RefetchBlock = ({ fetchMore, setNextPage, setRefetch, setCards, setIsRefetching, nextPage }) => {
+const RefetchBlock = ({
+  newName,
+  newGender,
+  newSpecies,
+  nextPage,
+  fetchMore,
+  setNextPage,
+  setRefetch,
+  setCards,
+  setIsRefetching,
+}: Props): JSX.Element => {
   const onClick = () => {
     setIsRefetching(true);
     fetchMore({
       variables: {
         page: nextPage,
+        name: newName,
+        gender: newGender,
+        species: newSpecies,
       },
     })
       .then((res) => {

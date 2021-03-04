@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import _ from 'lodash';
+import { Props } from '../../shared-types/shared-types';
 
 import { randomPage } from '../../utils/randomPage';
 import {
@@ -13,28 +14,36 @@ import {
   CheckboxItem,
   Label,
   SubmitBtn,
+  SwitchLabel,
+  SwitchItem,
+  Slider,
+  ButtonsBlock,
 } from './styles/style';
 
 type Form = {
   name: string;
   gender: string;
   species: string;
+  status: string;
 };
 
-interface Props {
-  setRefetch: React.Dispatch<React.SetStateAction<boolean>>;
-  setNextPage: React.Dispatch<React.SetStateAction<number>>;
-  fetchMore: any;
-  setCards: React.Dispatch<React.SetStateAction<any[]>>;
-  setIsRefetching: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const FilterBlock = ({ setRefetch, setCards, setIsRefetching, fetchMore, setNextPage }: Props): JSX.Element => {
+const FilterBlock = ({
+  setNewName,
+  setNewGender,
+  setNewSpecies,
+  setRefetch,
+  setCards,
+  setIsRefetching,
+  fetchMore,
+  setNextPage,
+  nextPage,
+}: Props): JSX.Element => {
   const { register, handleSubmit } = useForm<Form>();
   const onSubmit = (data: Form): void => {
     const name = data?.name;
     const gender = data?.gender;
     const species = data?.species;
+    const status = data?.status;
 
     setIsRefetching(true);
     fetchMore({
@@ -43,6 +52,7 @@ const FilterBlock = ({ setRefetch, setCards, setIsRefetching, fetchMore, setNext
         name,
         gender: gender || '',
         species: species || '',
+        status: status || '',
       },
     })
       .then((res) => {
@@ -52,8 +62,11 @@ const FilterBlock = ({ setRefetch, setCards, setIsRefetching, fetchMore, setNext
         if (newPage === null) {
           newPage = randomPage;
         }
-        setNextPage(newPage);
+        setNewName(name);
+        setNewGender(gender);
+        setNewSpecies(species);
         setCards(shuffledNew);
+        setNextPage(newPage);
         setRefetch(true);
       })
       .finally(() => {
@@ -98,11 +111,19 @@ const FilterBlock = ({ setRefetch, setCards, setIsRefetching, fetchMore, setNext
           <Label htmlFor="genderless">Genderless</Label>
         </CheckboxItem>
         <CheckboxItem>
-          <Checkbox name="gender" ref={register} type="radio" id="unknown" value="unknown"></Checkbox>
+          <Checkbox name="gender" ref={register} type="radio" id="unknown" value="unknown" />
           <Label htmlFor="unknown">Unknown</Label>
         </CheckboxItem>
       </FilterItem>
-      <SubmitBtn type="submit">Найти!</SubmitBtn>
+      <ButtonsBlock>
+        <SwitchLabel>
+          <SwitchItem name="status" ref={register} type="checkbox" value="Alive" />
+          <Slider />
+        </SwitchLabel>
+        <SubmitBtn ref={register} type="submit">
+          Найти!
+        </SubmitBtn>
+      </ButtonsBlock>
     </FilterBody>
   );
 };

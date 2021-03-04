@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-
+import { useQuery } from '@apollo/client';
+import { CHARACTERS } from '../../gql/queries/Character.query';
+import { Characters } from '../../gql/queries/types/Characters';
 import gsap from 'gsap';
 import Loading from '../loading';
 import RefetchBlock from '../refetch';
 import FilterBlock from '../fiter-block';
-import { useQuery } from '@apollo/client';
-import { CHARACTERS } from '../../gql/queries/Character.query';
-import { Characters } from '../../gql/queries/types/Characters';
 import { randomPage } from '../../utils/randomPage';
 import {
   Card,
@@ -22,6 +21,8 @@ import {
   Location,
   Picture,
   Info,
+  Blur,
+  FilterBtn,
 } from './styles/style';
 import _ from 'lodash';
 
@@ -37,20 +38,25 @@ const Cards = (): JSX.Element => {
   const nextRandomPage = data?.characters?.info?.next;
   const [id, setId] = useState(null);
   const [cards, setCards] = useState([]);
+  const [newName, setNewName] = useState('');
+  const [newGender, setNewGender] = useState('');
+  const [newSpecies, setNewSpecies] = useState('');
+  const [filterActive, setFilterActive] = useState(false);
   const [ok, setOk] = useState(false);
   const [refetch, setRefetch] = useState(false);
   const [isRefetching, setIsRefetching] = useState(false);
   const cardsRef = useRef([]);
+  const blurRef = useRef();
 
   const isEmpty = cards.length === 0;
 
   useEffect(() => {
     if (results && nextRandomPage) {
       const shuffled = _.shuffle(results);
+      setNextPage(nextRandomPage);
       setCards(shuffled);
       setId(shuffled[0].id);
       setOk(true);
-      setNextPage(nextRandomPage);
     }
   }, [results, nextRandomPage]);
 
@@ -89,18 +95,36 @@ const Cards = (): JSX.Element => {
     });
   };
 
+  const blurAnim = (): void => {
+    setFilterActive(true);
+    const blur = blurRef.current;
+    gsap.from(blur, 0.5, {
+      autoAlpha: 0,
+      onComplete: () => {
+        console.log('kek');
+      },
+    });
+  };
+
   if ((loading && !ok) || isRefetching) return <Loading />;
   if (error) return <p>Error :(</p>;
 
   return (
     <Wrapper>
+      <Blur ref={blurRef} />
       <FilterBlock
+        filterActive={filterActive}
+        nextPage={nextPage}
         setNextPage={setNextPage}
+        setNewSpecies={setNewSpecies}
         setRefetch={setRefetch}
         setCards={setCards}
         setIsRefetching={setIsRefetching}
         fetchMore={fetchMore}
+        setNewName={setNewName}
+        setNewGender={setNewGender}
       />
+      <FilterBtn onClick={() => blurAnim()}>Фильтры</FilterBtn>
       {!isEmpty && ok && (
         <Inner>
           <CardsBlock>
@@ -137,6 +161,9 @@ const Cards = (): JSX.Element => {
       )}
       {isEmpty && ok && (
         <RefetchBlock
+          newName={newName}
+          newGender={newGender}
+          newSpecies={newSpecies}
           nextPage={nextPage}
           setNextPage={setNextPage}
           setRefetch={setRefetch}

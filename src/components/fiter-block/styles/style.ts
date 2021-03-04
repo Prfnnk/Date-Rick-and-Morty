@@ -11,6 +11,7 @@ export const FilterBody = styled.form`
   background-color: white;
   box-shadow: 0 0 10px rgb(0 0 0 / 20%);
   padding: 0 20px;
+  z-index: 2;
 `;
 export const FilterItem = styled.div`
   font-family: 'Roboto', sans-serif;
@@ -18,7 +19,7 @@ export const FilterItem = styled.div`
   font-weight: 400;
   text-align: left;
   width: 100%;
-  padding: 20px 0;
+  padding-top: 20px;
   display: flex;
   flex-direction: column;
 `;
@@ -73,8 +74,61 @@ export const CheckboxItem = styled.div`
   display: flex;
   font-size: 18px;
   margin-bottom: 10px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 `;
 export const SubmitBtn = styled(Btn)`
   width: 125px;
   height: 35px;
+`;
+export const SwitchLabel = styled.label`
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 36px;
+  margin-bottom: 20px;
+`;
+export const Slider = styled.span`
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+
+  &:before {
+    position: absolute;
+    content: '';
+    height: 30px;
+    width: 30px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+`;
+export const SwitchItem = styled.input`
+  opacity: 0;
+  width: 0;
+  height: 0;
+
+  &:checked + ${Slider} {
+    background: #f4511e;
+    box-shadow: 0 0 10px rgb(0 0 0 / 20%);
+  }
+  // &:focus + ${Slider} {
+  //   box-shadow: 0 0 1px #f4511e;
+  // }
+  &:checked + ${Slider}:before {
+    transform: translateX(42px);
+  }
+`;
+export const ButtonsBlock = styled(FilterItem)`
+  align-items: center;
 `;
