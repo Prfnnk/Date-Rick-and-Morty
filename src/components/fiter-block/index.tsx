@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import _ from 'lodash';
+import gsap from 'gsap';
 import { Props } from '../../shared-types/shared-types';
 
 import { randomPage } from '../../utils/randomPage';
@@ -18,6 +19,8 @@ import {
   SwitchItem,
   Slider,
   ButtonsBlock,
+  SwitchBlock,
+  SwitchTitle,
 } from './styles/style';
 
 type Form = {
@@ -37,8 +40,26 @@ const FilterBlock = ({
   fetchMore,
   setNextPage,
   nextPage,
+  filterActive,
 }: Props): JSX.Element => {
   const { register, handleSubmit } = useForm<Form>();
+  const filterRef = useRef();
+
+  const filterBlockAnim = (): void => {
+    const filter = filterRef.current;
+    gsap.from(filter, 0.5, {
+      autoAlpha: 0,
+      x: -50,
+      onComplete: () => {
+        console.log('kek');
+      },
+    });
+  };
+
+  // useEffect(() => {
+  //   filterBlockAnim();
+  // }, [filterActive]);
+
   const onSubmit = (data: Form): void => {
     const name = data?.name;
     const gender = data?.gender;
@@ -75,7 +96,7 @@ const FilterBlock = ({
   };
 
   return (
-    <FilterBody onSubmit={handleSubmit(onSubmit)}>
+    <FilterBody ref={filterRef} onSubmit={handleSubmit(onSubmit)}>
       <Title>Выберите фильтры для поиска</Title>
       <FilterItem>
         <ItemTitle>По имени:</ItemTitle>
@@ -116,10 +137,14 @@ const FilterBlock = ({
         </CheckboxItem>
       </FilterItem>
       <ButtonsBlock>
-        <SwitchLabel>
-          <SwitchItem name="status" ref={register} type="checkbox" value="Alive" />
-          <Slider />
-        </SwitchLabel>
+        <SwitchBlock>
+          <SwitchTitle>Показать только живых</SwitchTitle>
+          <SwitchLabel>
+            <SwitchItem name="status" ref={register} type="checkbox" value="Alive" />
+            <Slider />
+          </SwitchLabel>
+        </SwitchBlock>
+
         <SubmitBtn ref={register} type="submit">
           Найти!
         </SubmitBtn>

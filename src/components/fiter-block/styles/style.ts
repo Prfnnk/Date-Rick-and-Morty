@@ -3,6 +3,7 @@ import { Btn } from '../../refetch/styles/style';
 import checked from '../images/checked.svg';
 
 export const FilterBody = styled.form`
+  visibility: hidden;
   position: absolute;
   left: 0;
   top: 0;
@@ -88,7 +89,6 @@ export const SwitchLabel = styled.label`
   display: inline-block;
   width: 80px;
   height: 36px;
-  margin-bottom: 20px;
 `;
 export const Slider = styled.span`
   position: absolute;
@@ -131,4 +131,13 @@ export const SwitchItem = styled.input`
 `;
 export const ButtonsBlock = styled(FilterItem)`
   align-items: center;
+`;
+export const SwitchBlock = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0 30px 0;
+`;
+export const SwitchTitle = styled.div`
+  font-size: 16px;
 `;

@@ -11,4 +11,5 @@ export interface Props {
   setNewGender?: React.Dispatch<React.SetStateAction<string>>;
   newSpecies?: string;
   setNewSpecies?: React.Dispatch<React.SetStateAction<string>>;
+  filterActive?: boolean;
 }
