@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import loading from './image/loading.svg';
 import { LoadingImg, Wrapper } from './styles/style';
 
-const Loading = () => {
+const Loading = (): JSX.Element => {
   const imgRef = useRef(null);
 
   useEffect(() => {

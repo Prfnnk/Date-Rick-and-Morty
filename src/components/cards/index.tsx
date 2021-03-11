@@ -41,7 +41,10 @@ const Cards = (): JSX.Element => {
   const [newName, setNewName] = useState('');
   const [newGender, setNewGender] = useState('');
   const [newSpecies, setNewSpecies] = useState('');
-  const [filterActive, setFilterActive] = useState(false);
+  const [toggleFilter, setToggleFilter] = useState<boolean | undefined>();
+
+  // const [firstEntry, setFirstEntry] = useState(true);
+
   const [ok, setOk] = useState(false);
   const [refetch, setRefetch] = useState(false);
   const [isRefetching, setIsRefetching] = useState(false);
@@ -95,15 +98,26 @@ const Cards = (): JSX.Element => {
     });
   };
 
-  const blurAnim = (): void => {
-    setFilterActive(true);
+  const blurAnim = (type: 'open' | 'close'): void => {
     const blur = blurRef.current;
-    gsap.from(blur, 0.5, {
-      autoAlpha: 0,
-      onComplete: () => {
-        console.log('kek');
-      },
-    });
+    if (type === 'open') {
+      setToggleFilter(true);
+      gsap.fromTo(
+        blur,
+        0.5,
+        {
+          autoAlpha: 0,
+        },
+        {
+          autoAlpha: 1,
+        }
+      );
+    } else if (type === 'close') {
+      setToggleFilter(false);
+      gsap.to(blur, 0.5, {
+        autoAlpha: 0,
+      });
+    }
   };
 
   if ((loading && !ok) || isRefetching) return <Loading />;
@@ -111,9 +125,10 @@ const Cards = (): JSX.Element => {
 
   return (
     <Wrapper>
-      <Blur ref={blurRef} />
+      <Blur onClick={() => blurAnim('close')} ref={blurRef} />
       <FilterBlock
-        filterActive={filterActive}
+        setToggleFilter={setToggleFilter}
+        toggleFilter={toggleFilter}
         nextPage={nextPage}
         setNextPage={setNextPage}
         setNewSpecies={setNewSpecies}
@@ -124,7 +139,7 @@ const Cards = (): JSX.Element => {
         setNewName={setNewName}
         setNewGender={setNewGender}
       />
-      <FilterBtn onClick={() => blurAnim()}>Фильтры</FilterBtn>
+      <FilterBtn onClick={() => blurAnim('open')}>Фильтры</FilterBtn>
       {!isEmpty && ok && (
         <Inner>
           <CardsBlock>

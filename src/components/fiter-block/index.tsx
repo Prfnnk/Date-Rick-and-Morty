@@ -39,26 +39,42 @@ const FilterBlock = ({
   setIsRefetching,
   fetchMore,
   setNextPage,
-  nextPage,
-  filterActive,
+  toggleFilter,
+  setToggleFilter,
 }: Props): JSX.Element => {
   const { register, handleSubmit } = useForm<Form>();
   const filterRef = useRef();
 
-  const filterBlockAnim = (): void => {
+  const filterBlockAnim = (type: 'open' | 'close'): void => {
     const filter = filterRef.current;
-    gsap.from(filter, 0.5, {
-      autoAlpha: 0,
-      x: -50,
-      onComplete: () => {
-        console.log('kek');
-      },
-    });
+    if (type === 'open') {
+      gsap.fromTo(
+        filter,
+        0.5,
+        {
+          autoAlpha: 0,
+          x: -250,
+        },
+        {
+          autoAlpha: 1,
+          x: 0,
+        }
+      );
+    } else if (type === 'close') {
+      gsap.to(filter, 0.5, {
+        autoAlpha: 0,
+        x: -250,
+      });
+    }
   };
 
-  // useEffect(() => {
-  //   filterBlockAnim();
-  // }, [filterActive]);
+  useEffect(() => {
+    if (toggleFilter) {
+      filterBlockAnim('open');
+    } else if (toggleFilter === false) {
+      filterBlockAnim('close');
+    }
+  }, [toggleFilter]);
 
   const onSubmit = (data: Form): void => {
     const name = data?.name;
@@ -66,6 +82,7 @@ const FilterBlock = ({
     const species = data?.species;
     const status = data?.status;
 
+    setToggleFilter(false);
     setIsRefetching(true);
     fetchMore({
       variables: {
@@ -83,6 +100,7 @@ const FilterBlock = ({
         if (newPage === null) {
           newPage = randomPage;
         }
+
         setNewName(name);
         setNewGender(gender);
         setNewSpecies(species);
