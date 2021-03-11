@@ -122,17 +122,7 @@ export const Info = styled.div`
 export const Picture = styled.div`
   width: 100%;
 `;
-export const Blur = styled.div`
-  visibility: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #6d2c178c;
-  backdrop-filter: blur(8px);
-  z-index: 2;
-`;
+
 export const FilterBtn = styled.button`
   position: absolute;
   top: 50px;

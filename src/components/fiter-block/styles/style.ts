@@ -122,9 +122,6 @@ export const SwitchItem = styled.input`
     background: #f4511e;
     box-shadow: 0 0 10px rgb(0 0 0 / 20%);
   }
-  // &:focus + ${Slider} {
-  //   box-shadow: 0 0 1px #f4511e;
-  // }
   &:checked + ${Slider}:before {
     transform: translateX(42px);
   }
@@ -140,4 +137,15 @@ export const SwitchBlock = styled.div`
 `;
 export const SwitchTitle = styled.div`
   font-size: 16px;
+`;
+export const Blur = styled.div`
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #6d2c178c;
+  backdrop-filter: blur(8px);
+  z-index: 2;
 `;

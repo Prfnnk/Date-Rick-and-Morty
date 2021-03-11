@@ -21,6 +21,7 @@ import {
   ButtonsBlock,
   SwitchBlock,
   SwitchTitle,
+  Blur,
 } from './styles/style';
 
 type Form = {
@@ -44,9 +45,11 @@ const FilterBlock = ({
 }: Props): JSX.Element => {
   const { register, handleSubmit } = useForm<Form>();
   const filterRef = useRef();
+  const blurRef = useRef();
 
   const filterBlockAnim = (type: 'open' | 'close'): void => {
     const filter = filterRef.current;
+    const blur = blurRef.current;
     if (type === 'open') {
       gsap.fromTo(
         filter,
@@ -60,10 +63,23 @@ const FilterBlock = ({
           x: 0,
         }
       );
-    } else if (type === 'close') {
+      gsap.fromTo(
+        blur,
+        0.5,
+        {
+          autoAlpha: 0,
+        },
+        {
+          autoAlpha: 1,
+        }
+      );
+    } else {
       gsap.to(filter, 0.5, {
         autoAlpha: 0,
         x: -250,
+      });
+      gsap.to(blur, 0.5, {
+        autoAlpha: 0,
       });
     }
   };
@@ -83,7 +99,7 @@ const FilterBlock = ({
     const status = data?.status;
 
     setToggleFilter(false);
-    setIsRefetching(true);
+    // setIsRefetching(true);
     fetchMore({
       variables: {
         page: 1,
@@ -114,60 +130,63 @@ const FilterBlock = ({
   };
 
   return (
-    <FilterBody ref={filterRef} onSubmit={handleSubmit(onSubmit)}>
-      <Title>Выберите фильтры для поиска</Title>
-      <FilterItem>
-        <ItemTitle>По имени:</ItemTitle>
-        <Input ref={register} name="name"></Input>
-      </FilterItem>
-      <FilterItem>
-        <ItemTitle>По виду:</ItemTitle>
-        <CheckboxItem>
-          <Checkbox name="species" ref={register} type="radio" id="human" value="Human"></Checkbox>
-          <Label htmlFor="human">Human</Label>
-        </CheckboxItem>
-        <CheckboxItem>
-          <Checkbox name="species" ref={register} type="radio" id="alien" value="Alien"></Checkbox>
-          <Label htmlFor="alien">Alien</Label>
-        </CheckboxItem>
-        <CheckboxItem>
-          <Checkbox name="species" ref={register} type="radio" id="mc" value="Mythological Creature"></Checkbox>
-          <Label htmlFor="mc">Mythological Creature</Label>
-        </CheckboxItem>
-      </FilterItem>
-      <FilterItem>
-        <ItemTitle>По полу:</ItemTitle>
-        <CheckboxItem>
-          <Checkbox name="gender" ref={register} type="radio" id="female" value="female"></Checkbox>
-          <Label htmlFor="female">Female</Label>
-        </CheckboxItem>
-        <CheckboxItem>
-          <Checkbox name="gender" ref={register} type="radio" id="male" value="male"></Checkbox>
-          <Label htmlFor="male">Male</Label>
-        </CheckboxItem>
-        <CheckboxItem>
-          <Checkbox name="gender" ref={register} type="radio" id="genderless" value="genderless"></Checkbox>
-          <Label htmlFor="genderless">Genderless</Label>
-        </CheckboxItem>
-        <CheckboxItem>
-          <Checkbox name="gender" ref={register} type="radio" id="unknown" value="unknown" />
-          <Label htmlFor="unknown">Unknown</Label>
-        </CheckboxItem>
-      </FilterItem>
-      <ButtonsBlock>
-        <SwitchBlock>
-          <SwitchTitle>Показать только живых</SwitchTitle>
-          <SwitchLabel>
-            <SwitchItem name="status" ref={register} type="checkbox" value="Alive" />
-            <Slider />
-          </SwitchLabel>
-        </SwitchBlock>
+    <>
+      <Blur onClick={() => setToggleFilter(false)} ref={blurRef} />
+      <FilterBody ref={filterRef} onSubmit={handleSubmit(onSubmit)}>
+        <Title>Выберите фильтры для поиска</Title>
+        <FilterItem>
+          <ItemTitle>По имени:</ItemTitle>
+          <Input ref={register} name="name"></Input>
+        </FilterItem>
+        <FilterItem>
+          <ItemTitle>По виду:</ItemTitle>
+          <CheckboxItem>
+            <Checkbox name="species" ref={register} type="radio" id="human" value="Human"></Checkbox>
+            <Label htmlFor="human">Human</Label>
+          </CheckboxItem>
+          <CheckboxItem>
+            <Checkbox name="species" ref={register} type="radio" id="alien" value="Alien"></Checkbox>
+            <Label htmlFor="alien">Alien</Label>
+          </CheckboxItem>
+          <CheckboxItem>
+            <Checkbox name="species" ref={register} type="radio" id="mc" value="Mythological Creature"></Checkbox>
+            <Label htmlFor="mc">Mythological Creature</Label>
+          </CheckboxItem>
+        </FilterItem>
+        <FilterItem>
+          <ItemTitle>По полу:</ItemTitle>
+          <CheckboxItem>
+            <Checkbox name="gender" ref={register} type="radio" id="female" value="female"></Checkbox>
+            <Label htmlFor="female">Female</Label>
+          </CheckboxItem>
+          <CheckboxItem>
+            <Checkbox name="gender" ref={register} type="radio" id="male" value="male"></Checkbox>
+            <Label htmlFor="male">Male</Label>
+          </CheckboxItem>
+          <CheckboxItem>
+            <Checkbox name="gender" ref={register} type="radio" id="genderless" value="genderless"></Checkbox>
+            <Label htmlFor="genderless">Genderless</Label>
+          </CheckboxItem>
+          <CheckboxItem>
+            <Checkbox name="gender" ref={register} type="radio" id="unknown" value="unknown" />
+            <Label htmlFor="unknown">Unknown</Label>
+          </CheckboxItem>
+        </FilterItem>
+        <ButtonsBlock>
+          <SwitchBlock>
+            <SwitchTitle>Показать только живых</SwitchTitle>
+            <SwitchLabel>
+              <SwitchItem name="status" ref={register} type="checkbox" value="Alive" />
+              <Slider />
+            </SwitchLabel>
+          </SwitchBlock>
 
-        <SubmitBtn ref={register} type="submit">
-          Найти!
-        </SubmitBtn>
-      </ButtonsBlock>
-    </FilterBody>
+          <SubmitBtn ref={register} type="submit">
+            Найти!
+          </SubmitBtn>
+        </ButtonsBlock>
+      </FilterBody>
+    </>
   );
 };
 export default FilterBlock;

@@ -21,7 +21,6 @@ import {
   Location,
   Picture,
   Info,
-  Blur,
   FilterBtn,
 } from './styles/style';
 import _ from 'lodash';
@@ -32,7 +31,7 @@ const Cards = (): JSX.Element => {
     variables: {
       page: randomPage,
     },
-    notifyOnNetworkStatusChange: true,
+    errorPolicy: 'all',
   });
   const results = data?.characters?.results;
   const nextRandomPage = data?.characters?.info?.next;
@@ -43,13 +42,10 @@ const Cards = (): JSX.Element => {
   const [newSpecies, setNewSpecies] = useState('');
   const [toggleFilter, setToggleFilter] = useState<boolean | undefined>();
 
-  // const [firstEntry, setFirstEntry] = useState(true);
-
   const [ok, setOk] = useState(false);
   const [refetch, setRefetch] = useState(false);
   const [isRefetching, setIsRefetching] = useState(false);
   const cardsRef = useRef([]);
-  const blurRef = useRef();
 
   const isEmpty = cards.length === 0;
 
@@ -73,7 +69,6 @@ const Cards = (): JSX.Element => {
 
   useEffect(() => {
     if (cards && cards.length > 0 && refetch) {
-      console.log(refetch, 'refetch');
       setId(cards[0]?.id);
       setRefetch(false);
     }
@@ -98,34 +93,11 @@ const Cards = (): JSX.Element => {
     });
   };
 
-  const blurAnim = (type: 'open' | 'close'): void => {
-    const blur = blurRef.current;
-    if (type === 'open') {
-      setToggleFilter(true);
-      gsap.fromTo(
-        blur,
-        0.5,
-        {
-          autoAlpha: 0,
-        },
-        {
-          autoAlpha: 1,
-        }
-      );
-    } else if (type === 'close') {
-      setToggleFilter(false);
-      gsap.to(blur, 0.5, {
-        autoAlpha: 0,
-      });
-    }
-  };
-
   if ((loading && !ok) || isRefetching) return <Loading />;
   if (error) return <p>Error :(</p>;
 
   return (
     <Wrapper>
-      <Blur onClick={() => blurAnim('close')} ref={blurRef} />
       <FilterBlock
         setToggleFilter={setToggleFilter}
         toggleFilter={toggleFilter}
@@ -139,7 +111,7 @@ const Cards = (): JSX.Element => {
         setNewName={setNewName}
         setNewGender={setNewGender}
       />
-      <FilterBtn onClick={() => blurAnim('open')}>Фильтры</FilterBtn>
+      <FilterBtn onClick={() => setToggleFilter(true)}>Фильтры</FilterBtn>
       {!isEmpty && ok && (
         <Inner>
           <CardsBlock>
