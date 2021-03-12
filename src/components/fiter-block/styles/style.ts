@@ -13,6 +13,7 @@ export const FilterBody = styled.form`
   box-shadow: 0 0 10px rgb(0 0 0 / 20%);
   padding: 0 20px;
   z-index: 2;
+  transform: translateX(-300px);
 `;
 export const FilterItem = styled.div`
   font-family: 'Roboto', sans-serif;
@@ -52,9 +53,10 @@ export const Label = styled.label`
     position: absolute;
     left: 0;
     top: calc(50% - 8px);
-    width: 13px;
-    height: 13px;
+    width: 14px;
+    height: 14px;
     border: 1px solid black;
+    border-radius: 50%;
   }
 `;
 
@@ -64,11 +66,12 @@ export const Checkbox = styled.input`
   &:checked + ${Label}:before {
     content: '';
     position: absolute;
-    left: 0;
-    top: calc(50% - 8px);
-    width: 15px;
-    height: 15px;
-    background-image: url(${checked});
+    left: 3px;
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    background-color: #f31702;
+    border-radius: 50%;
   }
 `;
 export const CheckboxItem = styled.div`
@@ -87,8 +90,8 @@ export const SubmitBtn = styled(Btn)`
 export const SwitchLabel = styled.label`
   position: relative;
   display: inline-block;
-  width: 80px;
-  height: 36px;
+  width: 70px;
+  height: 34px;
 `;
 export const Slider = styled.span`
   position: absolute;
@@ -104,10 +107,10 @@ export const Slider = styled.span`
   &:before {
     position: absolute;
     content: '';
-    height: 30px;
-    width: 30px;
+    height: 26px;
+    width: 26px;
     left: 4px;
-    bottom: 3px;
+    bottom: 4px;
     background-color: white;
     transition: 0.4s;
     border-radius: 50%;
@@ -123,7 +126,7 @@ export const SwitchItem = styled.input`
     box-shadow: 0 0 10px rgb(0 0 0 / 20%);
   }
   &:checked + ${Slider}:before {
-    transform: translateX(42px);
+    transform: translateX(36px);
   }
 `;
 export const ButtonsBlock = styled(FilterItem)`
@@ -133,10 +136,12 @@ export const SwitchBlock = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin: 20px 0 30px 0;
+  align-items: center;
+  margin: 15px 0 20px 0;
 `;
 export const SwitchTitle = styled.div`
-  font-size: 16px;
+  font-size: 17px;
+  width: 121px;
 `;
 export const Blur = styled.div`
   visibility: hidden;
@@ -148,4 +153,26 @@ export const Blur = styled.div`
   background: #6d2c178c;
   backdrop-filter: blur(8px);
   z-index: 2;
+  opacity: 0;
+`;
+export const ResetBtn = styled.button`
+  width: 125px;
+  height: 35px;
+  background: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
+
+  span {
+    width: 100%;
+    border-bottom: 1px solid black;
+  }
+
+  &:hover {
+    color: #f4511e;
+
+    span {
+      border-bottom: 1px solid #f4511e;
+    }
+  }
 `;

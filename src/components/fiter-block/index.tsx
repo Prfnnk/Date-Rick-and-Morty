@@ -22,6 +22,7 @@ import {
   SwitchBlock,
   SwitchTitle,
   Blur,
+  ResetBtn,
 } from './styles/style';
 
 type Form = {
@@ -32,9 +33,7 @@ type Form = {
 };
 
 const FilterBlock = ({
-  setNewName,
-  setNewGender,
-  setNewSpecies,
+  setNewRequest,
   setRefetch,
   setCards,
   setIsRefetching,
@@ -51,18 +50,10 @@ const FilterBlock = ({
     const filter = filterRef.current;
     const blur = blurRef.current;
     if (type === 'open') {
-      gsap.fromTo(
-        filter,
-        0.5,
-        {
-          autoAlpha: 0,
-          x: -250,
-        },
-        {
-          autoAlpha: 1,
-          x: 0,
-        }
-      );
+      gsap.to(filter, 0.5, {
+        autoAlpha: 1,
+        x: 0,
+      });
       gsap.fromTo(
         blur,
         0.5,
@@ -76,7 +67,7 @@ const FilterBlock = ({
     } else {
       gsap.to(filter, 0.5, {
         autoAlpha: 0,
-        x: -250,
+        x: -300,
       });
       gsap.to(blur, 0.5, {
         autoAlpha: 0,
@@ -112,14 +103,16 @@ const FilterBlock = ({
       .then((res) => {
         let newPage = res?.data?.characters?.info?.next;
         const newData = res?.data?.characters?.results;
+        const errors = res?.errors;
         const shuffledNew = _.shuffle(newData);
         if (newPage === null) {
           newPage = randomPage;
         }
-
-        setNewName(name);
-        setNewGender(gender);
-        setNewSpecies(species);
+        console.log(errors);
+        // setNewName(name);
+        // setNewGender(gender);
+        // setNewSpecies(species);
+        setNewRequest({ species, name, gender, status });
         setCards(shuffledNew);
         setNextPage(newPage);
         setRefetch(true);
@@ -129,10 +122,15 @@ const FilterBlock = ({
       });
   };
 
+  // const onReset = () => {
+  //   const form = filterRef.current;
+  //   form.reset();
+  // };
+
   return (
     <>
       <Blur onClick={() => setToggleFilter(false)} ref={blurRef} />
-      <FilterBody ref={filterRef} onSubmit={handleSubmit(onSubmit)}>
+      <FilterBody ref={filterRef} onSubmit={handleSubmit(onSubmit)} onReset={(e) => console.log(e)}>
         <Title>Выберите фильтры для поиска</Title>
         <FilterItem>
           <ItemTitle>По имени:</ItemTitle>
@@ -151,6 +149,10 @@ const FilterBlock = ({
           <CheckboxItem>
             <Checkbox name="species" ref={register} type="radio" id="mc" value="Mythological Creature"></Checkbox>
             <Label htmlFor="mc">Mythological Creature</Label>
+          </CheckboxItem>
+          <CheckboxItem>
+            <Checkbox name="species" ref={register} type="radio" id="anySpecies" value=""></Checkbox>
+            <Label htmlFor="anySpecies">Any</Label>
           </CheckboxItem>
         </FilterItem>
         <FilterItem>
@@ -171,20 +173,27 @@ const FilterBlock = ({
             <Checkbox name="gender" ref={register} type="radio" id="unknown" value="unknown" />
             <Label htmlFor="unknown">Unknown</Label>
           </CheckboxItem>
+          <CheckboxItem>
+            <Checkbox name="gender" ref={register} type="radio" id="anyGender" value="" />
+            <Label htmlFor="anyGender">Any</Label>
+          </CheckboxItem>
         </FilterItem>
         <ButtonsBlock>
           <SwitchBlock>
-            <SwitchTitle>Показать только живых</SwitchTitle>
             <SwitchLabel>
               <SwitchItem name="status" ref={register} type="checkbox" value="Alive" />
               <Slider />
             </SwitchLabel>
+            <SwitchTitle>Показать только живых</SwitchTitle>
           </SwitchBlock>
 
           <SubmitBtn ref={register} type="submit">
             Найти!
           </SubmitBtn>
         </ButtonsBlock>
+        <ResetBtn type="reset">
+          <span>Очистить все</span>
+        </ResetBtn>
       </FilterBody>
     </>
   );

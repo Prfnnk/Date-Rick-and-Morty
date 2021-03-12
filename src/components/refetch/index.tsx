@@ -6,9 +6,7 @@ import { randomPage } from '../../utils/randomPage';
 import { BlockWrapper, BtnBlock, LeftBtn, RightBtn, SadPic, SadText } from './styles/style';
 
 const RefetchBlock = ({
-  newName,
-  newGender,
-  newSpecies,
+  newRequest,
   nextPage,
   fetchMore,
   setNextPage,
@@ -21,9 +19,9 @@ const RefetchBlock = ({
     fetchMore({
       variables: {
         page: nextPage,
-        name: newName,
-        gender: newGender,
-        species: newSpecies,
+        name: newRequest.name,
+        gender: newRequest.gender,
+        species: newRequest.species,
       },
     })
       .then((res) => {

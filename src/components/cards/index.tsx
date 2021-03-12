@@ -37,9 +37,7 @@ const Cards = (): JSX.Element => {
   const nextRandomPage = data?.characters?.info?.next;
   const [id, setId] = useState(null);
   const [cards, setCards] = useState([]);
-  const [newName, setNewName] = useState('');
-  const [newGender, setNewGender] = useState('');
-  const [newSpecies, setNewSpecies] = useState('');
+  const [newRequest, setNewRequest] = useState({ status: '', name: '', gender: '', species: '' });
   const [toggleFilter, setToggleFilter] = useState<boolean | undefined>();
 
   const [ok, setOk] = useState(false);
@@ -103,13 +101,11 @@ const Cards = (): JSX.Element => {
         toggleFilter={toggleFilter}
         nextPage={nextPage}
         setNextPage={setNextPage}
-        setNewSpecies={setNewSpecies}
+        setNewRequest={setNewRequest}
         setRefetch={setRefetch}
         setCards={setCards}
         setIsRefetching={setIsRefetching}
         fetchMore={fetchMore}
-        setNewName={setNewName}
-        setNewGender={setNewGender}
       />
       <FilterBtn onClick={() => setToggleFilter(true)}>Фильтры</FilterBtn>
       {!isEmpty && ok && (
@@ -148,9 +144,7 @@ const Cards = (): JSX.Element => {
       )}
       {isEmpty && ok && (
         <RefetchBlock
-          newName={newName}
-          newGender={newGender}
-          newSpecies={newSpecies}
+          newRequest={newRequest}
           nextPage={nextPage}
           setNextPage={setNextPage}
           setRefetch={setRefetch}
