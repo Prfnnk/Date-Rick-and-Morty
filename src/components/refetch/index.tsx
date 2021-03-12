@@ -19,9 +19,9 @@ const RefetchBlock = ({
     fetchMore({
       variables: {
         page: nextPage,
-        name: newRequest.name,
-        gender: newRequest.gender,
-        species: newRequest.species,
+        name: newRequest.name || '',
+        gender: newRequest.gender || '',
+        species: newRequest.species || '',
       },
     })
       .then((res) => {

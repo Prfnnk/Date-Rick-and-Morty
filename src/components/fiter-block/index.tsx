@@ -42,7 +42,7 @@ const FilterBlock = ({
   toggleFilter,
   setToggleFilter,
 }: Props): JSX.Element => {
-  const { register, handleSubmit } = useForm<Form>();
+  const { register, handleSubmit, reset } = useForm<Form>();
   const filterRef = useRef();
   const blurRef = useRef();
 
@@ -130,7 +130,7 @@ const FilterBlock = ({
   return (
     <>
       <Blur onClick={() => setToggleFilter(false)} ref={blurRef} />
-      <FilterBody ref={filterRef} onSubmit={handleSubmit(onSubmit)} onReset={(e) => console.log(e)}>
+      <FilterBody ref={filterRef} onSubmit={handleSubmit(onSubmit)} onReset={() => reset()}>
         <Title>Выберите фильтры для поиска</Title>
         <FilterItem>
           <ItemTitle>По имени:</ItemTitle>
