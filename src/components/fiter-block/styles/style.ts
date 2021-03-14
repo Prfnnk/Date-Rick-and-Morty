@@ -137,7 +137,7 @@ export const SwitchBlock = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 15px 0 20px 0;
+  margin-bottom: 20px;
 `;
 export const SwitchTitle = styled.div`
   font-size: 17px;
@@ -162,6 +162,7 @@ export const ResetBtn = styled.button`
   outline: none;
   border: none;
   cursor: pointer;
+  margin-top: 10px;
 
   span {
     width: 100%;

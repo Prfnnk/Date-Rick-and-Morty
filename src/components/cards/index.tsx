@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@apollo/client';
 import { CHARACTERS } from '../../gql/queries/Character.query';
 import { Characters } from '../../gql/queries/types/Characters';
-import { useErrorStore } from '../../store/useErrorStore';
 import gsap from 'gsap';
 import Loading from '../loading';
 import RefetchBlock from '../refetch';
@@ -23,6 +22,7 @@ import {
   Picture,
   Info,
   FilterBtn,
+  FavouritesBtn,
 } from './styles/style';
 import _ from 'lodash';
 
@@ -44,7 +44,6 @@ const Cards = (): JSX.Element => {
   const [refetch, setRefetch] = useState(false);
   const [isRefetching, setIsRefetching] = useState(false);
   const cardsRef = useRef([]);
-  const store = useErrorStore();
 
   const isEmpty = cards.length === 0;
 
@@ -73,15 +72,17 @@ const Cards = (): JSX.Element => {
     }
   }, [refetch, cards]);
 
-  useEffect(() => {
-    if (store.errors.length > 0) {
-      console.log('ERROR MAZAFAKA');
-    }
-  }, [store.errors]);
-
   const removeCard = () => {
     const filtered = cards.filter((item) => item.id !== id);
     setCards(filtered);
+  };
+
+  const addToFavourites = (id) => {
+    let favouritesArr = [];
+    favouritesArr = JSON.parse(localStorage.getItem('favourites')) || [];
+    favouritesArr.push(id);
+    console.log(favouritesArr, 'array');
+    localStorage.setItem('favourites', JSON.stringify(favouritesArr));
   };
 
   const cardAnim = (type: 'skip' | 'like'): void => {
@@ -94,6 +95,7 @@ const Cards = (): JSX.Element => {
       opacity: 0,
       onComplete: () => {
         removeCard();
+        addToFavourites(id);
       },
     });
   };
@@ -114,7 +116,8 @@ const Cards = (): JSX.Element => {
         setIsRefetching={setIsRefetching}
         fetchMore={fetchMore}
       />
-      <FilterBtn onClick={() => setToggleFilter(true)}>Фильтры</FilterBtn>
+      <FilterBtn onClick={() => setToggleFilter(true)} />
+      <FavouritesBtn />
       {!isEmpty && ok && (
         <Inner>
           <CardsBlock>
@@ -135,7 +138,7 @@ const Cards = (): JSX.Element => {
                             <Name title={item.name}>{item.name ?? '-'}</Name>,
                             <NameSpan title={item.species}>{item.species ?? ''}</NameSpan>
                           </NameBlock>
-                          <Location>{item.location.name ?? ''}</Location>
+                          <Location title={item.location.name}>{item.location.name ?? ''}</Location>
                         </Info>
                       </Card>
                     </>

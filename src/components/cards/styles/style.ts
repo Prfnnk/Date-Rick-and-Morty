@@ -3,6 +3,8 @@ import heartInitial from '../images/heart-initial.svg';
 import skip from '../images/skip-initial.svg';
 import heartOnTap from '../images/heart-on-tap.svg';
 import skipOnTap from '../images/skip-on-tap.svg';
+import burger from '../images/burger.svg';
+import favourite from '../images/favourite.svg';
 
 type CardsType = {
   active: boolean;
@@ -107,6 +109,7 @@ export const NameSpan = styled.div`
 `;
 export const Location = styled.div`
   font-size: 20px;
+  ${TextEllipsis};
 `;
 export const Info = styled.div`
   position: absolute;
@@ -127,4 +130,25 @@ export const FilterBtn = styled.button`
   position: absolute;
   top: 50px;
   left: 50px;
+  width: 40px;
+  height: 40px;
+  background: url('${burger}');
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  outline: none;
+`;
+export const FavouritesBtn = styled.button`
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  width: 40px;
+  height: 40px;
+  background: url('${favourite}');
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  outline: none;
 `;
