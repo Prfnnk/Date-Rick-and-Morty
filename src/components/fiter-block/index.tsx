@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import _ from 'lodash';
 import gsap from 'gsap';
 import { Props } from '../../shared-types/shared-types';
+import { useErrorStore } from '../../store/useErrorStore';
 
 import { randomPage } from '../../utils/randomPage';
 import {
@@ -45,6 +46,7 @@ const FilterBlock = ({
   const { register, handleSubmit, reset } = useForm<Form>();
   const filterRef = useRef();
   const blurRef = useRef();
+  const store = useErrorStore();
 
   const filterBlockAnim = (type: 'open' | 'close'): void => {
     const filter = filterRef.current;
@@ -105,14 +107,18 @@ const FilterBlock = ({
         const newData = res?.data?.characters?.results;
         const errors = res?.errors;
         const shuffledNew = _.shuffle(newData);
+
+        if (newPage === null || errors) {
+          setNewRequest({ species: '', name: '', gender: '', status: '' });
+        } else {
+          setNewRequest({ species, name, gender, status });
+        }
+        if (errors) {
+          store.updateErrors(errors);
+        }
         if (newPage === null) {
           newPage = randomPage;
         }
-        console.log(errors);
-        // setNewName(name);
-        // setNewGender(gender);
-        // setNewSpecies(species);
-        setNewRequest({ species, name, gender, status });
         setCards(shuffledNew);
         setNextPage(newPage);
         setRefetch(true);
@@ -121,11 +127,6 @@ const FilterBlock = ({
         setIsRefetching(false);
       });
   };
-
-  // const onReset = () => {
-  //   const form = filterRef.current;
-  //   form.reset();
-  // };
 
   return (
     <>

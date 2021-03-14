@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@apollo/client';
 import { CHARACTERS } from '../../gql/queries/Character.query';
 import { Characters } from '../../gql/queries/types/Characters';
+import { useErrorStore } from '../../store/useErrorStore';
 import gsap from 'gsap';
 import Loading from '../loading';
 import RefetchBlock from '../refetch';
@@ -39,11 +40,11 @@ const Cards = (): JSX.Element => {
   const [cards, setCards] = useState([]);
   const [newRequest, setNewRequest] = useState({ status: '', name: '', gender: '', species: '' });
   const [toggleFilter, setToggleFilter] = useState<boolean | undefined>();
-
   const [ok, setOk] = useState(false);
   const [refetch, setRefetch] = useState(false);
   const [isRefetching, setIsRefetching] = useState(false);
   const cardsRef = useRef([]);
+  const store = useErrorStore();
 
   const isEmpty = cards.length === 0;
 
@@ -71,6 +72,12 @@ const Cards = (): JSX.Element => {
       setRefetch(false);
     }
   }, [refetch, cards]);
+
+  useEffect(() => {
+    if (store.errors.length > 0) {
+      console.log('ERROR MAZAFAKA');
+    }
+  }, [store.errors]);
 
   const removeCard = () => {
     const filtered = cards.filter((item) => item.id !== id);
@@ -144,6 +151,7 @@ const Cards = (): JSX.Element => {
       )}
       {isEmpty && ok && (
         <RefetchBlock
+          setNewRequest={setNewRequest}
           newRequest={newRequest}
           nextPage={nextPage}
           setNextPage={setNextPage}
