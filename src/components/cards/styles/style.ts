@@ -7,7 +7,7 @@ import burger from '../images/burger.svg';
 import favourite from '../images/favourite.svg';
 
 type CardsType = {
-  active: boolean;
+  opacity: number;
 };
 
 export const Wrapper = styled.div`
@@ -36,7 +36,7 @@ export const CardsBlock = styled.div`
   border-radius: 10px;
 `;
 
-export const Card = styled.div<CardsType>`
+export const Card = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -139,16 +139,36 @@ export const FilterBtn = styled.button`
   cursor: pointer;
   outline: none;
 `;
-export const FavouritesBtn = styled.button`
+export const FavBlock = styled.div`
   position: absolute;
   top: 50px;
   right: 50px;
   width: 40px;
   height: 40px;
+`;
+export const FavouritesBtn = styled.button`
+  width: 100%;
+  height: 100%;
   background: url('${favourite}');
   background-size: cover;
   background-repeat: no-repeat;
   border: none;
   cursor: pointer;
   outline: none;
+`;
+export const Counter = styled.div<CardsType>`
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: white;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  opacity: ${(props) => props.opacity};
 `;

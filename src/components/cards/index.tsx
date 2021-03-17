@@ -23,6 +23,8 @@ import {
   Info,
   FilterBtn,
   FavouritesBtn,
+  Counter,
+  FavBlock,
 } from './styles/style';
 import _ from 'lodash';
 
@@ -44,6 +46,7 @@ const Cards = (): JSX.Element => {
   const [refetch, setRefetch] = useState(false);
   const [isRefetching, setIsRefetching] = useState(false);
   const cardsRef = useRef([]);
+  const [favourites, setFavourites] = useState([]);
 
   const isEmpty = cards.length === 0;
 
@@ -81,10 +84,11 @@ const Cards = (): JSX.Element => {
     let favouritesArr = [];
     favouritesArr = JSON.parse(localStorage.getItem('favourites')) || [];
     favouritesArr.push(id);
-    console.log(favouritesArr, 'array');
-    localStorage.setItem('favourites', JSON.stringify(favouritesArr));
-  };
 
+    localStorage.setItem('favourites', JSON.stringify([...new Set(favouritesArr)]));
+    setFavourites(favouritesArr);
+  };
+  console.log(favourites, 'array');
   const cardAnim = (type: 'skip' | 'like'): void => {
     const card = cardsRef.current[id];
 
@@ -117,7 +121,11 @@ const Cards = (): JSX.Element => {
         fetchMore={fetchMore}
       />
       <FilterBtn onClick={() => setToggleFilter(true)} />
-      <FavouritesBtn />
+      <FavBlock>
+        <FavouritesBtn></FavouritesBtn>
+        <Counter opacity={favourites.length > 0 ? 1 : 0}>{favourites.length}</Counter>
+      </FavBlock>
+
       {!isEmpty && ok && (
         <Inner>
           <CardsBlock>
@@ -129,7 +137,7 @@ const Cards = (): JSX.Element => {
                   }
                   return (
                     <>
-                      <Card ref={(el) => (cardsRef.current[item.id] = el)} key={item.id} active={item.id === id}>
+                      <Card ref={(el) => (cardsRef.current[item.id] = el)} key={item.id}>
                         <Picture>
                           <img src={item.image ?? ''} alt="" />
                         </Picture>
